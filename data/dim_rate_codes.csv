@@ -1,0 +1,6 @@
+rate_code_id,rate_name,multiplier,is_commissionable
+RC_RACK,Rack Rate,1,FALSE
+RC_AAA,AAA Discount,0.9,FALSE
+RC_CORP,Corporate Negotiated,0.8,FALSE
+RC_NONREF,Non-Refundable,0.85,FALSE
+RC_PROMO,Seasonal Promo,0.7,TRUE

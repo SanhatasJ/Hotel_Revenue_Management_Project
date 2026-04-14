@@ -1,0 +1,6 @@
+channel_id,channel_name,channel_type,commission_rate
+CH_DIR,Direct Website,Direct,0
+CH_OTA,Expedia/Booking.com,OTA,0.18
+CH_WALK,Walk-in,Direct,0
+CH_CORP,Corporate Agent,Corporate,0.1
+CH_GDS,GDS,Indirect,0.12
