@@ -903,9 +903,37 @@
       </table>
       <simple-id uuid='{F5805668-8348-40DB-9554-297F027D612E}' />
     </worksheet>
+    <worksheet name='Hypo2'>
+      <layout-options>
+        <title>
+          <formatted-text>
+            <run fontcolor='#000000'>&lt;Sheet Name&gt;: </run>
+            <run fontcolor='#000000' fontname='Segoe UI Historic,Segoe UI,Helvetica,Arial,sans-serif' fontsize='11'>ลูกค้ากลุ่ม Leisure ที่เข้าพักในวันหยุด มีความอ่อนไหวต่อราคา (Price Sensitivity) ต่ำกว่าลูกค้ากลุ่มอื่น ทำให้โรงแรมสามารถปรับเพิ่มราคาในช่วง Weekend ได้มากกว่าปัจจุบัน</run>
+          </formatted-text>
+        </title>
+      </layout-options>
+      <table>
+        <view>
+          <datasources />
+          <aggregation value='true' />
+        </view>
+        <style />
+        <panes>
+          <pane selection-relaxation-option='selection-relaxation-allow'>
+            <view>
+              <breakdown value='auto' />
+            </view>
+            <mark class='Automatic' />
+          </pane>
+        </panes>
+        <rows />
+        <cols />
+      </table>
+      <simple-id uuid='{7CE5D5D6-D9D1-404B-8A45-D6021E52773E}' />
+    </worksheet>
   </worksheets>
   <windows source-height='30'>
-    <window class='worksheet' maximized='true' name='Hypo1'>
+    <window class='worksheet' name='Hypo1'>
       <cards>
         <edge name='left'>
           <strip size='160'>
@@ -943,6 +971,29 @@
         </highlight>
       </viewpoint>
       <simple-id uuid='{144187A4-58F7-47A9-A0A4-27F82B54504A}' />
+    </window>
+    <window class='worksheet' maximized='true' name='Hypo2'>
+      <cards>
+        <edge name='left'>
+          <strip size='160'>
+            <card type='pages' />
+            <card type='filters' />
+            <card type='marks' />
+          </strip>
+        </edge>
+        <edge name='top'>
+          <strip size='2147483647'>
+            <card type='columns' />
+          </strip>
+          <strip size='2147483647'>
+            <card type='rows' />
+          </strip>
+          <strip size='31'>
+            <card type='title' />
+          </strip>
+        </edge>
+      </cards>
+      <simple-id uuid='{5DF0AE0D-5A03-4A83-86FE-A9C0FDE8675E}' />
     </window>
   </windows>
   <thumbnails>
@@ -1029,6 +1080,20 @@
       lOrLuKbAcQNWmlWqtRquMriuS2NpmbDk44dV1tZW6EUdiryALMMvh9QqZU66gytZ+GG0Vi6F
       IWG1zkqrQZEm9AYxK+sbrK20OO32cVyX/mBIGPjEnRPCxvLU4/0/4sDMjpWR47wAAAAASUVO
       RK5CYII=
+    </thumbnail>
+    <thumbnail height='192' name='Hypo2' width='192'>
+      iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAACXBIWXMAAA7DAAAOwwHHb6hk
+      AAACFUlEQVR4nO3TMQEAIAzAMMC/5yFjRxMFfXpnZg5Eve0A2GQA0gxAmgFIMwBpBiDNAKQZ
+      gDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFI
+      MwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQD
+      kGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBp
+      BiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA
+      0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDN
+      AKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxA
+      mgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZ
+      gDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFI
+      MwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKQZgDQDkGYA0gxAmgFIMwBpBiDNAKR9Y+0F
+      fBUOM1sAAAAASUVORK5CYII=
     </thumbnail>
   </thumbnails>
 </workbook>
