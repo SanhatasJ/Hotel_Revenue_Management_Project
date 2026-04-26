@@ -1,4 +1,4 @@
-# **Hotel_Revenue_Management_Project**
+<img width="105" height="20" alt="image" src="https://github.com/user-attachments/assets/408c9a1e-677b-4de0-9e4e-7fb55481e835" /># **Hotel_Revenue_Management_Project**
 Repository นี้ใช้เพื่อทำ Project วิชา CP372 Data Analytics and Business Intelligence
 
 ## **Member:**
@@ -172,6 +172,7 @@ You own a mid-sized, independent hotel ("The Azure Stay"). While the property is
 
 ## **The AI-generated dataset**
 - [fact_booking.csv](./data/fact_bookings.csv)
+- [dim_room_type.csv](./data/dim_room_type.csv)
 - [dim_room_inventory.csv](./data/dim_room_inventory.csv)
 - [dim_rate_codes.csv](./data/dim_rate_codes.csv)
 - [dim_channels.csv](./data/dim_channels.csv)
@@ -403,27 +404,62 @@ Please write and execute a Python script using pandas and numpy to generate this
 ### **fact_bookings**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-|  |  |  |  |
+| booking_id |  |  |  |
+| guest_id |  |  |  |
+| booking_date |  |  |  |
+| check_in_date |  |  |  |
+| check_out_date |  |  |  |
+| room_type_id |  |  |  |
+| rate_code_id |  |  |  |
+| channel_id |  |  |  |
+| segment_id |  |  |  |
+| status |  |  |  |
+| total_room_revenue |  |  |  |
+| number_of_room |  |  |  |
+| adults_count |  |  |  |
+| children_count |  |  |  |
+
+### **dim_room_type**
+| **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
+| --- | --- | --- | --- |
+| room_type_id |  |  |  |
+| room_type_name |  |  |  |
+| base_rate |  |  |  |
+| capacity_count |  |  |  |
+| max_occupancy |  |  |  |
 
 ### **dim_room_inventory**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-|  |  |  |  |
+| date |  |  |  |
+| total_capacity |  |  |  |
+| rooms_out_of_order |  |  |  |
+| rooms_available_for_sale |  |  |  |
 
 ### **dim_rate_codes**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-|  |  |  |  |
+| rate_code_id |  |  |  |
+| rate_name |  |  |  |
+| multiplier |  |  |  |
+| is_commissionable |  |  |  |
 
 ### **dim_channels**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-|  |  |  |  |
+| channel_id |  |  |  |
+| channel_name |  |  |  |
+| channel_type |  |  |  |
+| commision_rate |  |  |  |
 
 ### **dim_calendar**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-|  |  |  |  |
+| date_key |  |  |  |
+| day_name |  |  |  |
+| is_weekend |  |  |  |
+| is_holiday |  |  |  |
+| season |  |  |  |
 
 ## **Measure**
 
