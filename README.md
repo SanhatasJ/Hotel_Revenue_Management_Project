@@ -7,7 +7,7 @@ Repository นี้ใช้เพื่อทำ Project วิชา CP372 Da
 - นายสัณหธรรศน์ จึงธีรพานิช 66102010154
 
 ## **Project Canvas**
-![Project Canvas for draft only](https://media.licdn.com/dms/image/v2/D4D12AQF4BocZW-cxAw/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1676883113677?e=2147483647&v=beta&t=03Ht2gRsmL4lgmqvNfoNj2URzj0eIQBA9KOuEXSuRFQ)
+![Project Canvas](./Project_canvas.png)
 
 ## **Background & Pain Points**
 
