@@ -471,6 +471,16 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 ## **Dimension**
 
+| **Measure** | **Definition** | **Calculation Formula** | **Example** |
+| --- | --- | --- | --- |
+| LOS | จำนวนคืนที่เข้าพักในโรงแรม | DATEDIFF('day', [Check In Date], [Check Out Date]) | 1, 3 |
+| Day of Week | วันที่ที่มีผู้เข้าพัก | - | Monday, Thursday |
+| Booking Channel | ช่องทางการจองที่พัก | - | Direct Website, Corporate Agent |
+| Rate Code | ส่วนลดสำหรับการจอง | - | Rack Rate, Non-Refundable |
+| Customer Segment | ประเภทกลุ่มลูกค้าต่าง ๆ | - | Leisure, Business |
+| BLT | จำนวนวันระหว่างวันที่จองกับวันที่พัก | DATEDIFF('day', [Booking Date], [Check In Date]) | 0, 62 |
+
+
 ## **EDA & Visualizations**
 
 ## **Findings (Insights)**
