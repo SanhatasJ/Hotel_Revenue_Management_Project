@@ -159,15 +159,27 @@ You own a mid-sized, independent hotel ("The Azure Stay"). While the property is
 ## **Logical folder structure**
 
 ```
-├── data/
-│   ├── raw/                 # ไฟล์ CSV ที่ Generate มาตอนแรก
-│   └── processed/           # ไฟล์ CSV ที่ผ่านการทำ Clean/Join (ถ้ามี)
-├── notebooks/
-│   └── eda_analysis.ipynb   # โค้ด Python/Pandas ที่ใช้ดูข้อมูลเบื้องต้น
+├── blueprints/
+│   ├── DB_Hypo1.png
+│   ├── DB_Hypo2.png
+│   ├── DB_Hypo3.png
+│   ├── DB_Hypo4.png
+│   ├── DB_Hypo5.png
+│   ├── DB_Hypo6.png
+│   ├── DB_Hypo7.png
+│   ├── Presentation_Hotel_Revenue_Management.pdf
+│   └── Project_canvas.png
 ├── dashboards/
-│   └── azure_stay_bi.twbx   # ไฟล์ Tableau หรือภาพ Screenshot ของ Dashboard
-├── README.md                # สรุปโปรเจคและ Insights
-└── presentation.pdf         # สไลด์สำหรับพรีเซนต์ 7 นาที
+│   └── azure_stay_bi.twb
+├── data/
+│   ├── dim_calendar.csv
+│   ├── dim_channel.csv
+│   ├── dim_rate_code.csv
+│   ├── dim_room_inventory.csv
+│   ├── dim_room_type.csv
+│   └── fact_bookings.csv
+└── README.md
+
 ```
 
 ## **The AI-generated dataset**
