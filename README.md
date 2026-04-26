@@ -171,11 +171,11 @@ You own a mid-sized, independent hotel ("The Azure Stay"). While the property is
 ```
 
 ## **The AI-generated dataset**
-- [fact_booking.csv](https://github.com/SanhatasJ/Hotel_Revenue_Management_Project/blob/main/data/fact_bookings.csv)
-- [dim_room_inventory.csv]()
-- [dim_rate_codes.csv]()
-- [dim_channels.csv]()
-- [dim_calendar.csv]()
+- [fact_booking.csv](./data/fact_bookings.csv)
+- [dim_room_inventory.csv](./data/dim_room_inventory.csv)
+- [dim_rate_codes.csv](./data/dim_rate_codes.csv)
+- [dim_channels.csv](./data/dim_channels.csv)
+- [dim_calendar.csv](./data/dim_calendar.csv)
 
 ## **Prompt is used for generating data**
 ในการ generate dataset ชุดนี้ขึ้นมาใช้ทั้งหมด 2 prompt ตามลำดับดังนี้
