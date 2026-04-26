@@ -483,6 +483,101 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 ## **EDA & Visualizations**
 
+### **Hypothesis 1:** Dynamic Pricing Inefficiency
+
+การใช้ราคาแบบ Static (ราคาเดียวตลอดสัปดาห์) ในวันศุกร์และเสาร์ ทำให้โรงแรมเสียโอกาสในการทำกำไร (Revenue Opportunity Loss) แม้จะมี Occupancy สูงก็ตาม**
+
+![Dashboard for Hypothesis 1](./dashboards/DB_Hypo1.png)
+
+**Non-Reject Hypothesis**
+
+#### Findings and Insights
+
+- วันหยุด (Weekend) มี Occupancy หรือความต้องการที่จะเข้าพักสูงกว่าวันธรรมดา (Weekday) อย่างมีนัยสำคัญ
+- แต่ ADR ในวันหยุดนั้นกลับไม่ได้สูงตาม ซึ่งเป็นผลมาจากกลยุทธ์การตั้งราคาแบบ Static
+- กลยุทธิ์การตั้งราคาในวันหยุดไม่ได้สอดคล้องกับความต้องการ (Demand) และสามารถเพิ่ม ADR ในวันหยุดได้
+
+### **Hypothesis 2:** Leisure Segment Price Elasticity
+
+ลูกค้ากลุ่ม Leisure ที่เข้าพักในวันหยุด มีความอ่อนไหวต่อราคา (Price Sensitivity) ต่ำกว่าลูกค้ากลุ่มอื่น ทำให้โรงแรมสามารถปรับเพิ่มราคาในช่วง Weekend ได้มากกว่าปัจจุบัน
+
+![Dashboard for Hypothesis 2](./dashboards/DB_Hypo2.png)
+
+**Non-Reject Hypothesis**
+
+#### Findings and Insights
+
+1. **Segment Comparison**
+   1. รายได้ส่วนใหญ่ของโรงแรมมาจากกลุ่ม Leisure
+   2.	กลุ่ม Leisure ใน Weekend มี ADR สูงพอ ๆ กับ Weekday
+2. **ความสัมพันธ์ของราคากับยอดจองของ Leisure**
+   1. เส้น Trend Line ของวันหยุด (สีแดง) มีความชันน้อยหรือเกือบขนานกับแกน X แสดงได้ว่าแม้ ADR จะสูงขึ้น ยอดจองก็ยังคงที่ หรือ ความยืดหยุ่นสูง
+3. **ความสัมพันธ์ของราคากับยอดจองของ Leisure**
+   1. กลุ่ม Leisure จะมีการใช้ Rack rate และ Seasonal Promo ที่ค่อนข้างสูง
+   2. กลุ่ม Business จะมีการใช้ Rack rate อยู่พอสมควร และมีการใช้ Corporate Negotiated ในสัดส่วนที่สูง
+4. **วิเคราะห์ผ่าน Rate Code เฉพาะ Leisure**
+   1. กลุ่ม Leisure ใน Weekend ยังคงจอง Rack Rate (เต็มราคา) ในสัดส่วนที่ค่อนข้างสูง หรือไม่ได้รรอใช้ Seasonal Promo ทั้งหมด แสดงได้ว่ากลุ่ม Leisure มีกำลังซื้อและยอมรับราคาได้
+   
+### **Hypothesis 3:** 
+
+
+
+![Dashboard for Hypothesis 3](./dashboards/DB_Hypo3.png)
+
+**Non-Reject Hypothesis**
+
+#### Findings and Insights
+
+- 
+
+### **Hypothesis 4:** 
+
+
+
+![Dashboard for Hypothesis 4](./dashboards/DB_Hypo4.png)
+
+**Non-Reject Hypothesis**
+
+#### Findings and Insights
+
+- 
+
+### **Hypothesis 5:** 
+
+
+
+![Dashboard for Hypothesis 5](./dashboards/DB_Hypo5.png)
+
+**Reject Hypothesis**
+
+#### Findings and Insights
+
+- 
+
+### **Hypothesis 6:** 
+
+
+
+![Dashboard for Hypothesis 6](./dashboards/DB_Hypo6.png)
+
+**Non-Reject Hypothesis**
+
+#### Findings and Insights
+
+- 
+
+### **Hypothesis 7:** 
+
+
+
+![Dashboard for Hypothesis 7](./dashboards/DB_Hypo7.png)
+
+**Reject Hypothesis**
+
+#### Findings and Insights
+
+- 
+
 ## **Findings (Insights)**
 
 ## **Recommendations**
