@@ -465,11 +465,9 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 | **Measure** | **Definition** | **Calculation Formula** | **Range of Values** |
 | --- | --- | --- | --- |
-| **RevPAR** (Revenue Per Available Room) |  |  |  |
-| **ADR** (Average Daily Rate) |  |  |  |
-| **OCC** (Occupancy) |  |  |  |
-| **LOS** (Length of Stay) |  |  |  |
-| **BLT** (Booking Lead Time) |  |  |  |
+| **RevPAR** (Revenue Per Available Room) | รายได้เฉลี่ยต่อห้องทั้งหมดที่มี |  | [0, Infinity] |
+| **ADR** (Average Daily Rate) | ราคาเฉลี่ยต่อห้องที่ถูกขายได้ |  | [0, Infinity] |
+| **OCC** (Occupancy) | อัตรการเข้าพัก |  | [0%, 100%] |
 
 ## **Dimension**
 
