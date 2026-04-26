@@ -181,7 +181,7 @@ You own a mid-sized, independent hotel ("The Azure Stay"). While the property is
 ## **Prompt is used for generating data**
 ในการ generate dataset ชุดนี้ขึ้นมาใช้ทั้งหมด 2 prompt ตามลำดับดังนี้
 
-1. First_propmt
+1. First_prompt
 ```
 ตอนนี้ฉันกำลังทำ Project วิชา Data Analytics and Business Intelligence สำหรับการทำ Project วิชานี้
 
