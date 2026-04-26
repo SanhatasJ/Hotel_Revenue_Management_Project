@@ -497,6 +497,8 @@ Please write and execute a Python script using pandas and numpy to generate this
 - แต่ ADR ในวันหยุดนั้นกลับไม่ได้สูงตาม ซึ่งเป็นผลมาจากกลยุทธ์การตั้งราคาแบบ Static
 - กลยุทธิ์การตั้งราคาในวันหยุดไม่ได้สอดคล้องกับความต้องการ (Demand) และสามารถเพิ่ม ADR ในวันหยุดได้
 
+---
+
 ### **Hypothesis 2:** Leisure Segment Price Elasticity
 
 ลูกค้ากลุ่ม Leisure ที่เข้าพักในวันหยุด มีความอ่อนไหวต่อราคา (Price Sensitivity) ต่ำกว่าลูกค้ากลุ่มอื่น ทำให้โรงแรมสามารถปรับเพิ่มราคาในช่วง Weekend ได้มากกว่าปัจจุบัน
@@ -517,10 +519,12 @@ Please write and execute a Python script using pandas and numpy to generate this
    2. กลุ่ม Business จะมีการใช้ Rack rate อยู่พอสมควร และมีการใช้ Corporate Negotiated ในสัดส่วนที่สูง
 4. **วิเคราะห์ผ่าน Rate Code เฉพาะ Leisure**
    1. กลุ่ม Leisure ใน Weekend ยังคงจอง Rack Rate (เต็มราคา) ในสัดส่วนที่ค่อนข้างสูง หรือไม่ได้รรอใช้ Seasonal Promo ทั้งหมด แสดงได้ว่ากลุ่ม Leisure มีกำลังซื้อและยอมรับราคาได้
+
+---
    
-### **Hypothesis 3:** 
+### **Hypothesis 3:** Stay Pattern Optimization (MLOS)
 
-
+การไม่มีข้อกำหนดระยะเวลาเข้าพักขั้นต่ำ (Minimum Length of Stay - MLOS) ในวันเสาร์ ทำให้เกิดการเสียโอกาสในการขายห้องพักแบบต่อเนื่อง (Friday-Sunday) ส่งผลให้ RevPAR เฉลี่ยของทั้งช่วงสุดสัปดาห์ต่ำกว่าที่ควรจะเป็น
 
 ![Dashboard for Hypothesis 3](./dashboards/DB_Hypo3.png)
 
@@ -528,11 +532,18 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 #### Findings and Insights
 
-- 
+1. **Stay Pattern**
+   1. สัดส่วนการจองในวันเสาร์กระจุกตัวอยู่ที่ระยะเวลา 1-2 คืนรวมกันเกือบ 45% ของการจองทั้งหมด การจำกัดหรือคัดกรองเฉพาะผู้ที่จอง 2 คืนขึ้นไป (MLOS 2) จะช่วยดันให้ Occupancy ของวันศุกร์หรืออาทิตย์สูงขึ้นตามไปด้วยโดยอัตโนมัติจากการพักต่อเนื่อง
+2. **Revenue Impact**
+   1. จากการวิเคราะห์เปรียบเทียบค่ารายได้เฉลี่ย (Average Revenue) ลูกค้าที่จองเข้าพักในวันเสาร์เพียง 1 คืน สร้างรายได้เฉลี่ยประมาณ 193 บาท ในขณะที่ลูกค้าที่พัก 2 คืนสร้างรายได้สูงถึง 384 บาท การปล่อยให้มีการจอง 1 คืนในวันเสาร์เป็นจำนวนมาก (ซึ่งมีสัดส่วนถึง 21.6%) จึงเป็นการเสียโอกาสในการรับรายได้ที่สูงกว่าจากการพักต่อเนื่อง
+3. **Displacement Analysis**
+   1. แม้ Occupancy ในวันเสาร์จะสูง แต่ในวันข้างเคียง (ศุกร์ และ อาทิตย์) ยังมีช่องว่างของห้องพักที่เหลืออยู่ (Occupancy อยู่ที่ประมาณ 41% และ 50%) สิ่งนี้ชี้ให้เห็นว่าการจอง 1 คืนในวันเสาร์กำลัง "แย่งพื้นที่" ลูกค้ากลุ่มที่ต้องการพักยาวแบบ Weekend Getaway (ศุกร์-เสาร์ หรือ เสาร์-อาทิตย์) ซึ่งเป็นกลุ่มที่สร้างมูลค่าสูงกว่า
 
-### **Hypothesis 4:** 
+---
 
+### **Hypothesis 4:** Rate Code Dilution (การใช้โปรโมชั่นพร่ำเพรื่อในฤดูกาลท่องเที่ยว)
 
+การใช้ Rate Code ประเภท 'Seasonal Promo' หรือ 'AAA Discount' ในช่วง High Season มีสัดส่วนที่สูงเกินความจำเป็น ส่งผลให้ ADR เฉลี่ยลดลง (Dilution) ทั้งที่ความต้องการห้องพักสูงอยู่แล้ว
 
 ![Dashboard for Hypothesis 4](./dashboards/DB_Hypo4.png)
 
@@ -540,11 +551,14 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 #### Findings and Insights
 
-- 
+- จากกราฟแสดงให้เห็นว่าในช่วง High Season มีสัดส่วนของ Seasonal Promo (ลด 30%) และ Corporate Negotiated (ลด 20%) รวมกันถึง 57.36% (30.43% + 26.93%)
+- แสดงว่าเกิด Dilution (การเจือจองของราคา) เพราะความจริงแล้วช่วงนี้ควรเป็นช่วงที่ขาย Rack Rate ได้มากที่สุด
 
-### **Hypothesis 5:** 
+---
 
+### **Hypothesis 5:** Low Season Segment Pivot (การปรับกลุ่มเป้าหมายในฤดูกาลท่องเที่ยวต่ำ)
 
+ในช่วง Low Season (May-June, Oct-Nov) รายได้หลักถูกขับเคลื่อนโดยกลุ่ม 'Business' มากกว่า 'Leisure' การทำโปรโมชั่นที่เน้นนักท่องเที่ยวในช่วงนี้จึงไม่ได้ประสิทธิภาพเท่ากับการทำโปรโมชั่นกับบริษัท (Corporate)
 
 ![Dashboard for Hypothesis 5](./dashboards/DB_Hypo5.png)
 
@@ -552,11 +566,14 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 #### Findings and Insights
 
-- 
+- ในช่วง Low Season แม้จะมีการยอดการเข้าพักที่น้อย กลุ่มลูกค้าที่เข้าพักในสัดส่วนที่มากที่สุดไม่ใช่กลุ่ม Business (2.63%) แต่เป็นกลุ่ม Leisure (3.81%)
+- กลุ่มที่สร้างรายได้ให้กับโรงแรมมากที่สุดก็ยังคงเป็นกลุ่ม Leisure (62.35%) ไม่ใช่กลุ่ม Business (13.58%)
 
-### **Hypothesis 6:** 
+---
 
+### **Hypothesis 6:** Channel revenue Analysis
 
+รายได้จากการจองผ่านช่องทางต่าง ๆ ของโรงแรมส่วนใหญ่เป็นช่องทางอื่น ๆ มากกว่าตรง (Direct) แต่เมื่อพิจารณาแล้วจะพบว่าช่องทางอื่น ๆ มีการเสียค่า Commission ที่เยอะมาก ซึ่งส่งผลให้โรงแรมเสียรายได้ที่ควรจะเป็นของโรมแรม ถ้าสามารถผลักดันให้ลูกค้าจองผ่านช่องทางตรงได้เพิ่มขึ้นจะสามารถทำให้โรงแรมกลับมาสร้างรายได้อย่างมีประสิทธิภาพมากขึ้น
 
 ![Dashboard for Hypothesis 6](./dashboards/DB_Hypo6.png)
 
@@ -564,11 +581,20 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 #### Findings and Insights
 
-- 
+1. **Without compute commission**
+   1. รายได้จากช่องทางตรง (Direct Website, Walk-in) สามารถสร้างรายได้ให้แก่โรมแรมทั้งสิ้น **2,623,735 บาท** (42.136%)
+   2. รายได้จากช่องทางอื่น (Corporate Agent, GDS, OTA) สามารถสร้างรายได้ให้แก่โรมแรมทั้งสิ้น **3,603,086 บาท** (57.864%)
+   3. สัดส่วนของรายได้ผ่านช่องทางตรงและช่องทางอื่นทำให้ทราบว่ารายได้จากช่องทางอื่น ๆ มีสัดส่วนมากกว่าช่องทางตรงเล็กน้อย
+2. **With compute commission**
+   1. รายได้สุทธิจากช่องทางตรง (Direct Website, Walk-in) สามารถสร้างรายได้ให้แก่โรมแรมทั้งสิ้น **2,623,735 บาท** (45.555%)
+   2. รายได้จากช่องทางอื่น (Corporate Agent, GDS, OTA) สามารถสร้างรายได้ให้แก่โรมแรมทั้งสิ้น **3,135,811 บาท** (54.445%)
+   3. สังเกตได้ว่าสัดส่วนรายได้สุทธิของช่องทางตรงเพิ่มขึ้นเป็น 45.555% และสัดส่วนรายได้สุทธิของช่องทางอื่นลดลงเป็น 54.445% จากคำนวณค่า Commission ที่ต้องเสียไป ซึ่งคิดเป็นเงินทั้งสิ้น **467,275 บาท** (7.504%)
 
-### **Hypothesis 7:** 
+---
 
+### **Hypothesis 7:** The "Sweet Spot" Lead Time (ช่วงเวลาทองของการจองที่ทำกำไรสูงสุด)
 
+การจองที่มี BLT อยู่ในช่วง 7-14 วัน ให้ค่า RevPAR สูงที่สุดเมื่อเทียบกับช่วงเวลาอื่น เนื่องจากเป็นช่วงที่ความต้องการ (Demand) เริ่มคงที่และโรงแรมไม่ต้องใช้โปรโมชั่นลดราคาหนักเท่ากลุ่ม Early-bird
 
 ![Dashboard for Hypothesis 7](./dashboards/DB_Hypo7.png)
 
@@ -576,7 +602,16 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 #### Findings and Insights
 
-- 
+1. **The "Sweet Spot" Lead Time**
+   1. การจองแบบ 31+ Days ให้ ADR (1,255.37) และ RevPAR (53.13) สูงสุดและคือ **Sweet Spot** หรือก็คือยิ่งจองล่วงหน้านาน ยิ่งดีทั้งราคาห้องและรายได้รวมต่อห้องทั้งหมด
+2. **วิเคราะห์ความสัมพันธ์ระหว่าง LOS กับจำนวน Booking ของกลุ่ม Early BLT**
+   1. ลูกค้ากลุ่ม Early BLT (31+ Days) มีพฤติกรรมที่จะจองพักหลายคืน (LOS อย่างน้อย 3 วัน) และนิยมที่จะจองพัก 5 คืนและ 7 คืนมากที่สุด
+3. **วิเคราะห์ความสัมพันธ์ระหว่าง LOS กับ Net ADR ของกลุ่ม Early BLT**
+   1. จาก 2. ทำให้ ลูกค้ากลุ่ม Early BLT (31+ Days) ยิ่งพักหลายคืน ยิ่งสร้าง Net ADR สูง
+4. **วิเคราะห์ความสัมพันธ์ระหว่าง LOS กับ RevPAR ของกลุ่ม Early BLT**
+   1. จาก 2. ทำให้ ลูกค้ากลุ่ม Early BLT (31+ Days) ยิ่งพักหลายคืน ยิ่งสร้าง RevPAR สูง
+
+---
 
 ## **Findings (Insights)**
 
