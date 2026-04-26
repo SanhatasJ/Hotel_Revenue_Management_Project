@@ -1,2 +1,674 @@
-# Hotel_Revenue_Management_Project
+# **Hotel_Revenue_Management_Project**
 Repository นี้ใช้เพื่อทำ Project วิชา CP372 Data Analytics and Business Intelligence
+
+## **Member:**
+- นายคุณานนต์ หฤทัยธรรม 66102010134
+- นายณัฐนนท์ หลิมเหล็ก 66102010137
+- นายสัณหธรรศน์ จึงธีรพานิช 66102010154
+
+## **Project Canvas**
+![Project Canvas](./blueprints/Project_canvas.png)
+
+## **Background & Pain Points**
+
+### **Scenario:** The Hotel Business Owner's Dilemma
+### **Context:**
+You own a mid-sized, independent hotel ("The Azure Stay"). While the property is beautiful, profitability is stagnant. You have identified three critical pain points that require data-driven solutions
+
+### **Pain Points (Problem):**
+**Revenue Stagnation:** Despite decent foot traffic, your Revenue Per Available Room (RevPAR) is lower than competitors, suggesting inefficient pricing and inventory management
+
+**Goal:** Maximize revenue by selling the right room to the right customer at the right time.
+
+## **SMART Objectives**
+
+เพิ่ม RevPAR ขึ้นอย่างน้อย 10% เมื่อเทียบกับไตรมาสก่อนหน้า ภายใน 2 ไตรมาสหน้า จากการวิเคราะห์และปรับโครงสร้าง ADR ปรับกลยุทธ์การขายตาม Seasonality และปรับ Occupancy ให้เหมาะกับ Demand ของลูกค้าแต่ละกลุ่ม (Segmentation) จากฐานข้อมูลเดิมที่มีอยู่
+
+## **Hypothesis & Method**
+
+### **Hypothesis 1:** Dynamic Pricing Inefficiency
+
+การใช้ราคาแบบ Static (ราคาเดียวตลอดสัปดาห์) ในวันศุกร์และเสาร์ ทำให้โรงแรมเสียโอกาสในการทำกำไร (Revenue Opportunity Loss) แม้จะมี Occupancy สูงก็ตาม
+
+#### **Logic:**
+
+หากข้อมูลแสดงให้เห็นว่า Occupancy ในวันหยุดสูง แต่ ADR เท่ากับวันธรรมดา แสดงว่าโรงแรม "ตั้งราคาต่ำเกินไป" เมื่อเทียบกับ Demand จริง
+
+#### **Method:**
+
+- เปรียบเทียบ Occupancy ของ Weekend กับ Weekday
+-	เปรียบเทียบ ADR ของ Weekend กับ Weekday
+
+#### **Goal:**
+
+เพื่อพิสูจน์ว่ากลยุทธ์การตั้งราคาในวันหยุดนั้นไม่ได้สอดคล้องกับความต้องการ (Demand) และสามารถเพิ่ม ADR ในวันหยุดได้
+
+---
+
+### **Hypothesis 2:** Leisure Segment Price Elasticity
+
+ลูกค้ากลุ่ม Leisure ที่เข้าพักในวันหยุด มีความอ่อนไหวต่อราคา (Price Sensitivity) ต่ำกว่าลูกค้ากลุ่มอื่น ทำให้โรงแรมสามารถปรับเพิ่มราคาในช่วง Weekend ได้มากกว่าปัจจุบัน
+
+#### **Logic:**
+
+ลูกค้าที่เที่ยววันหยุดมักจะยินดีจ่ายแพงกว่าเพื่อให้ได้พักในวันที่ตัวเองสะดวก หากเราวิเคราะห์ตาม Customer Segment จะพบว่ากลุ่มนี้มักจองผ่าน Rate Code ที่เป็น Rack Rate หรือ Promo ที่ไม่ได้ลดหย่อนมากนัก
+
+#### **Method:**
+
+- เปรียบเทียบ ADR แยกตาม Segment_id (Business vs Leisure) ในช่วง Weekend
+- คำนวณ Price Elasticity เบื้องต้นจากการดูการเปลี่ยนแปลงของยอดจองเมื่อมีการใช้ Rate Code ต่างๆ
+
+#### **Goal:**
+
+เพื่อระบุกลุ่มเป้าหมายที่จะยอมรับการขึ้นราคา ADR ในวันหยุดได้
+
+---
+
+### **Hypothesis 3:** Stay Pattern Optimization (MLOS)
+
+การไม่มีข้อกำหนดระยะเวลาเข้าพักขั้นต่ำ (Minimum Length of Stay - MLOS) ในวันเสาร์ ทำให้เกิดการเสียโอกาสในการขายห้องพักแบบต่อเนื่อง (Friday-Sunday) ส่งผลให้ RevPAR เฉลี่ยของทั้งช่วงสุดสัปดาห์ต่ำกว่าที่ควรจะเป็น
+
+#### **Logic:**
+
+หากลูกค้าจองแค่คืนวันเสาร์เพียงคืนเดียว (LOS = 1) อาจทำให้คืนวันศุกร์หรืออาทิตย์ที่เหลืออยู่ขายยากขึ้น การวิเคราะห์ LOS จะช่วยบอกได้ว่าเราควรบังคับจอง 2 คืนหรือไม่
+
+#### **Method:**
+
+- วิเคราะห์ Average LOS ของการจองที่มี Check-in ในวันศุกร์และเสาร์
+-	คำนวณ Total Revenue ของการจองแบบ 1 คืน vs 2 คืน ในช่วงวันหยุด
+
+#### **Goal:**
+
+เพื่อเสนอแนะการใช้กลยุทธ์ MLOS เพื่อดึงค่า RevPAR ในภาพรวมของสัปดาห์ให้สูงขึ้น
+
+---
+
+### **Hypothesis 4:** Rate Code Dilution (การใช้โปรโมชั่นพร่ำเพรื่อในฤดูกาลท่องเที่ยว)
+
+การใช้ Rate Code ประเภท 'Seasonal Promo' หรือ 'AAA Discount' ในช่วง High Season มีสัดส่วนที่สูงเกินความจำเป็น ส่งผลให้ ADR เฉลี่ยลดลง (Dilution) ทั้งที่ความต้องการห้องพักสูงอยู่แล้ว
+
+#### **Logic:**
+
+ในช่วงที่คนอยากพักเยอะ เราไม่จำเป็นต้องลดราคา สมมติฐานนี้ต้องการพิสูจน์ว่าโรงแรมกำลัง "แจกส่วนลด" ให้คนที่ยินดีจ่ายราคาเต็มอยู่แล้วหรือไม่
+
+#### **Method:**
+
+- วิเคราะห์ Rate Code Distribution (สัดส่วนการใช้ราคาแต่ละประเภท) แยกตาม Season
+
+#### **Goal:**
+
+เพื่อกำหนดนโยบาย "Blackout Dates" (งดใช้โปรโมชั่น) ในช่วง High Season
+
+---
+
+### **Hypothesis 5:** Low Season Segment Pivot (การปรับกลุ่มเป้าหมายในฤดูกาลท่องเที่ยวต่ำ)
+
+ในช่วง Low Season (May-June, Oct-Nov) รายได้หลักถูกขับเคลื่อนโดยกลุ่ม 'Business' มากกว่า 'Leisure' การทำโปรโมชั่นที่เน้นนักท่องเที่ยวในช่วงนี้จึงไม่ได้ประสิทธิภาพเท่ากับการทำโปรโมชั่นกับบริษัท (Corporate)
+
+#### **Logic:**
+
+เมื่อนักท่องเที่ยวลดลงตามฤดูกาล แต่กลุ่มคนทำงานหรือสัมมนา (Business/Corporate) ยังมีการเดินทางอยู่ การทุ่มงบการตลาดไปที่ Leisure ในช่วง Low Season อาจเป็นต้นทุนที่สูญเปล่า
+
+#### **Method:**
+
+- วิเคราะห์สัดส่วน segment_id แยกตามเดือน เพื่อดูว่ากลุ่มไหนทำรายได้สูงสุดในแต่ละฤดูกาล
+
+#### **Goal:**
+
+เพื่อปรับเปลี่ยนกลยุทธ์การขาย (Sales Strategy) ให้เน้นเจาะกลุ่ม Corporate ในช่วง Low Season เพื่อพยุง Occupancy ไม่ให้ตกลง
+
+---
+
+### **Hypothesis 6:** Channel revenue Analysis
+
+รายได้จากการจองผ่านช่องทางต่าง ๆ ของโรงแรมส่วนใหญ่เป็นช่องทางอื่น ๆ มากกว่าตรง (Direct) แต่เมื่อพิจารณาแล้วจะพบว่าช่องทางอื่น ๆ มีการเสียค่า Commission ที่เยอะมาก ซึ่งส่งผลให้โรงแรมเสียรายได้ที่ควรจะเป็นของโรมแรม ถ้าสามารถผลักดันให้ลูกค้าจองผ่านช่องทางตรงได้เพิ่มขึ้นจะสามารถทำให้โรงแรมกลับมาสร้างรายได้อย่างมีประสิทธิภาพมากขึ้น
+
+#### **Logic:**
+
+ลูกค้าส่วนใหญ่ไม่ได้เข้าเว็บไซต์โรงแรมเพื่อจองที่พัก แต่นิยมเลือกโรงแรมเข้าพักจากช่องทางอื่น ๆ เช่น OTA หรือ GDS การที่เราไม่ผลักดันให้ลูกค้าจองผ่านช่องทางตรงจะส่งผลให้เราเสียรายได้ที่ควรจะได้ไป
+
+#### **Method:**
+
+-	วิเคราะห์รายได้ผ่านช่องทางต่าง ๆ **ก่อน**คิดค่า Commission
+-	วิเคราะห์รายได้ผ่านช่องทางต่าง ๆ **หลัง**คิดค่า Commission
+
+#### **Goal:**
+
+เพื่อทำให้โรงแรมกลับมาสร้างรายได้อย่างมีประสิทธิภาพมากขึ้นอย่างที่ควรจะเป็น
+
+---
+
+### **Hypothesis 7:** The "Sweet Spot" Lead Time (ช่วงเวลาทองของการจองที่ทำกำไรสูงสุด)
+
+การจองที่มี BLT อยู่ในช่วง 7-14 วัน ให้ค่า RevPAR สูงที่สุดเมื่อเทียบกับช่วงเวลาอื่น เนื่องจากเป็นช่วงที่ความต้องการ (Demand) เริ่มคงที่และโรงแรมไม่ต้องใช้โปรโมชั่นลดราคาหนักเท่ากลุ่ม Early-bird
+
+#### **Logic:**
+
+กลุ่มจองนานเกินไปมักได้ส่วนลด (Early Bird) ส่วนกลุ่มจองสั้นเกินไปมักมีความเสี่ยงเรื่องห้องว่าง (Unsold Rooms) สมมติฐานนี้ต้องการหาว่า "ช่วงเวลาไหน" ที่ลูกค้าสู้ราคาที่สุด
+
+#### **Method:**
+
+-	ทำกราฟ Scatter Plot ระหว่าง BLT (แกน X) และ ADR/RevPAR (แกน Y) เพื่อหาจุด Peak ของรายได้
+
+#### **Goal:**
+
+เพื่อปรับราคาให้เป็น Dynamic ตามระยะเวลาการจอง (Booking Window)
+
+---
+
+## **Logical folder structure**
+
+```
+├── blueprints/
+│   ├── DB_Hypo1.png
+│   ├── DB_Hypo2.png
+│   ├── DB_Hypo3.png
+│   ├── DB_Hypo4.png
+│   ├── DB_Hypo5.png
+│   ├── DB_Hypo6.png
+│   ├── DB_Hypo7.png
+│   ├── Presentation_Hotel_Revenue_Management.pdf
+│   └── Project_canvas.png
+├── dashboards/
+│   └── azure_stay_bi.twb
+├── data/
+│   ├── dim_calendar.csv
+│   ├── dim_channel.csv
+│   ├── dim_rate_code.csv
+│   ├── dim_room_inventory.csv
+│   ├── dim_room_type.csv
+│   └── fact_bookings.csv
+└── README.md
+
+```
+
+## **The AI-generated dataset**
+- [fact_booking.csv](./data/fact_bookings.csv)
+- [dim_room_type.csv](./data/dim_room_type.csv)
+- [dim_room_inventory.csv](./data/dim_room_inventory.csv)
+- [dim_rate_codes.csv](./data/dim_rate_codes.csv)
+- [dim_channels.csv](./data/dim_channels.csv)
+- [dim_calendar.csv](./data/dim_calendar.csv)
+
+## **Prompt is used for generating data**
+ในการ generate dataset ชุดนี้ขึ้นมาใช้ทั้งหมด 2 prompt ตามลำดับดังนี้
+
+1. First_prompt
+```
+ตอนนี้ฉันกำลังทำ Project วิชา Data Analytics and Business Intelligence สำหรับการทำ Project วิชานี้
+
+ฉันต้องการให้คุณ generate prompt สำหรับสร้าง dataset ในรูปแบบของไฟล์ Excel (.xlsx) ภายใต้บริบทดังนี้
+
+Scenario: The Hotel Business Owner's Dilemma
+Context: You own a mid-sized, independent hotel ("The Azure Stay"). While the property is beautiful, profitability is stagnant. You have identified critical pain points that require data-driven solutions:
+
+Problem: Revenue Stagnation: Despite decent foot traffic, your Revenue Per Available Room (RevPAR) is lower than competitors, suggesting inefficient pricing and inventory management
+
+Goal: ​​Maximize revenue by selling the right room to the right customer at the right time.
+
+โดย Project นี้เรามี Smart Objectives Value Propositions คือ 
+"
+เพิ่ม RevPAR ขึ้นอย่างน้อย 10% เมื่อเทียบกับไตรมาสก่อนหน้า ภายใน 2 ไตรมาสหน้า จากการวิเคราะห์และปรับโครงสร้าง ADR ปรับกลยุทธ์การขายตาม Seasonality และปรับ Occupancy ให้เหมาะกับ Demand ของลูกค้าแต่ละกลุ่ม (Segmentation) จากฐานข้อมูลเดิมที่มีอยู่
+"
+
+Measures & Dimensions 
+These are the quantitative metrics used to evaluate performance.
+
+1. RevPAR (Revenue Per Available Room)
+Definition: A performance metric used to assess the hotel's ability to fill available rooms at an average rate.
+Calculation Formula: Total Room Revenue / Total Rooms Available
+Range of Values: $0 - Max Potential Rate
+
+2. ADR (Average Daily Rate)
+Definition: The average rental income per paid occupied room in a given time period.
+Calculation Formula: Total Room Revenue / Number of Rooms Sold
+Range of Values: $0 - Rack Rate
+
+3. OCC (Occupancy)
+Definition: The percentage of available rooms that were sold during a specific period.
+Calculation Formula: (Number of Rooms Sold / Total Rooms Available) * 100
+Range of Values: 0% - 100%
+
+4. LOS (Length of Stay)
+Definition: The duration of a guest's visit, measured in nights. Important for analyzing guest behavior and cleaning costs.
+Calculation Formula: Check-out Date - Check-in Date
+Range of Values: 1 - 365+ (depending on policy)
+
+5. BLT (Booking Lead Time)
+Definition: The number of days between the booking date and the arrival date
+Calculation Formula: Arrival Date - Booking Date
+Range of Values: 0 - 365+ days
+
+Key Dimensions
+These are the categorical attributes used to slice and dice the measures.
+
+1. Day of Week
+Definition: The specific day the room is occupied (critical for weekend vs. weekday analysis).
+Set of Possible Values: Mon, Tue, Wed, Thu, Fri, Sat, Sun
+
+2. Booking Channel
+Definition: The source where the reservation originated (high cost vs. low cost channels).
+Set of Possible Values: Direct Website, OTA (Expedia, Booking.com), Walk-in, Corporate Agent, GDS
+
+3. Rate Code
+Definition: The specific price package or discount applied to the reservation.
+Set of Possible Values: Rack Rate, AAA Discount, Corporate Negotiated, Non-Refundable, Seasonal Promo
+
+4. Room Type
+Definition: The physical category of the room inventory.
+Set of Possible Values: Standard Queen, Deluxe King, Suite, Ocean View
+
+5. Customer Segment
+Definition: Classification of the guest's travel purpose.
+Set of Possible Values: Business, Leisure, Group, Transient, Wholesale
+
+Sample Dataset
+To calculate the measures above and derive insights, you would need a relational dataset typically exported from a Property Management System (PMS). Here is the schema structure:
+
+Table 1: fact_bookings
+This is the main transactional table containing one row per reservation.
+- booking_id (Primary Key): Unique identifier for the reservation (e.g., RES-10023).
+- guest_id: Unique identifier for the guest.
+- booking_date: The date the reservation was made.
+- check_in_date: The scheduled arrival date.
+- check_out_date: The scheduled departure date.
+- room_type_id: Foreign key linking to the Room Type dimension.
+- rate_code_id: Foreign key linking to the Rate Code dimension.
+- channel_id: Foreign key linking to the Booking Channel dimension.
+- segment_id: Foreign key linking to the Customer Segment dimension.
+- status: Status of booking (e.g., Confirmed, Cancelled, Checked-Out, No-Show).
+- total_room_revenue: The total revenue generated from the room rent (excluding taxes/extras).
+- number_of_rooms: Number of rooms booked in this specific reservation.
+- adults_count: Number of adults.
+- children_count: Number of children.
+
+Table 2: dim_room_inventory
+This table defines the hotel's capacity. It is essential for calculating "Total Rooms Available" for RevPAR and Occupancy.
+- date (Primary Key): A specific calendar date (e.g., 2025-10-01).
+- total_capacity: Total physical rooms in the hotel.
+- rooms_out_of_order: Number of rooms unavailable due to maintenance (cannot be sold).
+- rooms_available_for_sale: total_capacity - rooms_out_of_order.
+
+Table 3: dim_rate_codes
+A lookup table for pricing strategies.
+- rate_code_id (Primary Key): E.g., RC_CORP.
+- rate_name: E.g., "Corporate Flat Rate".
+- description: Description of inclusions (e.g., "Includes Breakfast & Wifi").
+- is_commissionable: Boolean (True/False) indicating if a commission is paid to a 3rd party.
+
+Table 4: dim_channels
+A lookup table for booking sources.
+- channel_id (Primary Key): E.g., CH_EXP.
+- channel_name: E.g., "Expedia".
+- channel_type: E.g., "OTA", "Direct", "Wholesaler".
+- commission_rate: The percentage fee paid to the channel (e.g., 0.15 for 15%).
+
+Table 5: dim_calendar (Optional but Recommended)
+A standard date dimension to make "Day of Week" analysis easier.
+- date_key: Date format YYYY-MM-DD.
+- day_name: Monday, Tuesday, etc.
+- is_weekend: Boolean flag.
+- is_holiday: Boolean flag for public holidays.
+- season: High Season, Low Season, Shoulder Season.
+
+Project Evaluation Rubric (Total 100 Points)
+
+Section 1: Strategic Alignment (15 Points)
+This section evaluates how well the group understands the business context and defines success.
+1.1
+Criteria: Background & Pain Points
+Points: 7
+Description of Excellence: Clearly articulates the "Azure Stay" dilemma. Correctly identifies the specific problem chosen (Revenue Stagnation, High Costs, or Leakage) and its impact on profitability.
+
+1.2
+Criteria: SMART Objectives
+Points: 8
+Description of Excellence: Objectives are Specific, Measurable, Achievable, Relevant, and Time-bound. They align with the goals mentioned in the scenario (e.g., maximizing Net RevPAR or reducing No-Shows).
+
+Section 2: Analytical Design (25 Points)
+This section evaluates the logic used to set up the data investigation.
+2.1
+Criteria: Hypothesis & Method
+Points: 10
+Description of Excellence: Develops testable 3 hypotheses and correctly applies formulas (e.g., Net ADR or Cancellation Rate).
+
+2.2
+Criteria: GitHub Documentation
+Points: 15
+Description of Excellence: The repository is professionally organized with a clear README.md explaining the project. Includes code scripts, the AI-generated dataset, and a logical folder structure. Commit history shows consistent progress.  Set it as a public repository.  Thai or English is acceptable.
+
+Section 3: Data Execution & EDA (30 Points)
+This section focuses on the technical application and the quality of the AI-generated dataset.
+3.1
+Criteria: AI Data Quality 
+Points: 10
+Description of Excellence: AI-generated data strictly adheres to the required schema (e.g., fact_bookings, dim_channels, dim_guests).  Declare your prompt that is used for generating data.  Declare definitions and descriptions.  For any measure, declare how to calculate.  For any dimension derived from a conditional statement, declare it.  
+
+3.2
+Criteria: EDA & Visualizations
+Points: 20
+Description of Excellence: Explain clearly what you want to explore in EDA.  Uses high-quality charts to analyze measures by critical dimensions like Booking Channel, Rate Code, or Policy Type.  Every chart must have your explanation why it is an appropriate choice.
+
+Section 4: Insights & Impact (15 Points)
+This section evaluates the "Business Intelligence" aspect—turning data into value.
+4.1
+Criteria: Findings (Insights)
+Points: 7
+Description of Excellence: Accurately interprets results to identify the "root cause" of the problem (e.g., identifying "Serial Cancellers").
+
+4.2
+Criteria: Recommendations
+Points: 8
+Description of Excellence: Provides actionable advice, such as optimizing marketing spend for high-profit channels or adjusting penalty types.
+
+Section 5: Communication & Presentation (15 Points)
+This section evaluates the live delivery and professional quality.
+5.1
+Criteria: Live Presentation
+Points: 10
+Description of Excellence: Professional delivery, clear slides, and effective storytelling. The group handles Q&A with confidence, demonstrating a deep understanding of their data and the hotel's business logic.
+
+5.2
+Criteria: Participant Questioning
+Points: 5
+Description of Excellence: Group members participate mastery by contributing on questioning to the presenters. Every group representative (participant side) contributes to defending the analytical choices.  For each group presentation, timing is set at 10 minutes (7 minutes for presentation and 3 minutes for Q&A).  Questions must reflect your understanding in analytics.
+
+Dataset ที่ฉันต้องการให้คุณ Generate นั้นต้องมี Data Quality Rules
+1. Completeness ไม่ต้องมาทำขั้นตอน Data cleaning อีกเลย
+2. Consistency (ความสอดคล้อง)
+
+โดยต้องการข้อมูลอย่างน้อย 10,000 records
+
+แพทเทิร์นที่ต้องการให้ซ่อนไว้ (Embedded Insights & Patterns)
+ภายใน Dataset ต้องมีข้อมูลที่มี insights & patterns สอดคล้องกับ Objective โดยไม่ต้องบอกฉัน แต่ฉันต้องสามารถที่จะหา insights & patterns ได้จากกระบวนการทำ EDA 
+```
+
+2. Second_propmt.txt
+```
+📋 The Master Prompt for Dataset Generation
+Role: You are a Senior Data Engineer and Revenue Management Consultant for "The Azure Stay" hotel.
+Task: Generate a comprehensive synthetic dataset for a Hotel BI Project. The output must be an Excel file (.xlsx) with 5 sheets corresponding to the provided schema.
+Business Context & Hidden Patterns (Critical):
+The dataset must contain subtle "pain points" and "opportunities" that I can discover during EDA:
+
+The Weekend Gap: Weekends (Fri-Sat) have high Occupancy but the ADR is nearly identical to weekdays, showing a failure to capture premium weekend demand.
+Channel Leakage: The "OTA" channel has the highest volume but also the highest cancellation rates and lowest Net ADR (after accounting for a 15-20% commission).
+Seasonality Misalignment: During "High Season" (Dec-Jan, July-Aug), the hotel reaches 100% occupancy too early, suggesting the "Rack Rate" was set too low.
+Segment Behavior: "Business" guests have high ADR but short LOS (1-2 nights), while "Leisure" guests stay longer (4+ nights) but only book during "Seasonal Promo".
+Dataset Requirements:
+
+Rows: At least 10,000 records in fact_bookings.
+Date Range: 1 year of historical data (e.g., April 2025 to March 2026).
+Quality: No missing values, referential integrity between tables must be perfect.
+Schema to Follow:
+
+fact_bookings: (booking_id, guest_id, booking_date, check_in_date, check_out_date, room_type_id, rate_code_id, channel_id, segment_id, status, total_room_revenue, number_of_rooms, adults_count, children_count). Note: Ensure LOS and BLT can be calculated from dates.
+dim_room_inventory: (date, total_capacity [set at 150], rooms_out_of_order [random 0-5], rooms_available_for_sale).
+dim_rate_codes: (RC_RACK, RC_AAA, RC_CORP, RC_NONREF, RC_PROMO).
+dim_channels: (Direct, OTA, Walk-in, Corporate, GDS) with corresponding commission rates.
+dim_calendar: Standard date dimension including Day of Week, Weekend flag, and Seasonality.
+Instructions for AI:
+Please write and execute a Python script using pandas and numpy to generate this data. Ensure the total_room_revenue is logically tied to room_type and rate_code. After generating, provide a download link for the .xlsx file.
+```
+
+## **Data Dictionary**
+
+### **fact_bookings**
+| **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
+| --- | --- | --- | --- |
+| booking_id | รหัสหมายเลขการจอง (Unique Identifier) | Ordinal | RES-10040, RES-12017 |
+| guest_id | รหัสอ้างอิงข้อมูลผู้เข้าพัก (Unique Identifier) | Ordinal | G-2500, G-2109 |
+| booking_date | วันที่ทำการจองห้องพัก | Interval (Date) | 2025-08-10, 2025-10-25 |
+| check_in_date | วันที่ผู้เข้าพักเช็คอิน | Interval (Date) | 2025-10-25, 2026-03-31 |
+| check_out_date | วันที่ผู้เข้าพักเช็คเอาท์ | Interval (Date) | 2026-01-26, 2026-04-02  |
+| room_type_id | รหัสประเภทห้องพักที่จอง (Unique Identifier) | Nominal | RT_SUI, RT_SQ |
+| rate_code_id | รหัสเรทราคาที่ใช้ในการจอง (Unique Identifier) | Nominal | RC_CORP, RC_RACK |
+| channel_id | รหัสช่องทางที่ใช้จอง (Unique Identifier) | Nominal | CH_WALK, CH_OTA |
+| segment_id | รหัสกลุ่มตลาดของลูกค้า (Unique Identifier) | Nominal | Business, Leisure |
+| status | สถานะการจอง | Nominal | Confirmed, Checked-Out, Cancelled, No-Show |
+| total_room_revenue | รายได้รวมจากค่าห้องพักของการจองครั้งนี้ | Ratio (Continuous) | [0, Infinity] |
+| number_of_room | จำนวนห้องที่จองภายใต้เลขการจองนี้ | Ratio (Discrete) | [0, 150] |
+| adults_count | จำนวนผู้ใหญ่ | Ratio (Discrete) | 0, 3 |
+| children_count | จำนวนเด็ก | Ratio (Discrete) | 0, 1 |
+
+### **dim_room_type**
+| **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
+| --- | --- | --- | --- |
+| room_type_id | รหัสประเภทห้องพักที่จอง (Unique Identifier) เชื่อมกับ fact_bookings.csv (room_type_id) | Nominal | RT_DK, RT_OV |
+| room_type_name | ชื่อประเภทห้องพัก | Nominal | Standard Queen, Deluxe King |
+| base_rate | ราคามาตรฐานของห้องประเภทนั้น ๆ ต่อคืนก่อนใช้ rate code | Ratio (Continuous) | [150, Infinity] |
+| capacity_count | จำนวนห้องพักทั้งหมดที่มีในโรงแรมสำหรับห้องประเภทนั้น ๆ | Ratio (Discrete) | 20, 50 |
+| max_occupancy | จำนวนผู้เข้าพักสูงสุดที่อนุญาต | Ratio (Discrete) | 3, 4 |
+
+### **dim_room_inventory**
+| **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
+| --- | --- | --- | --- |
+| date | วันที่ที่มีการจัดเก็บข้อมูลสินค้าคงคลัง เชื่อมกับ dim_calendar.csv (date_key) | Interval (Date) | 2025-10-25, 2026-03-31 |
+| total_capacity | จำนวนห้องพักทั้งหมดที่มีในโรงแรม | Ratio (Discrete) | [0, Infinity] |
+| rooms_out_of_order | จำนวนห้องที่ปิดปรับปรุงหรือไม่พร้อมขายในวันนั้น | Ratio (Discrete) | 0, 5 |
+| rooms_available_for_sale | จำนวนห้องสุทธิที่เปิดขายจริงในวันนั้น | Ratio (Discrete) | 146, 150 |
+
+### **dim_rate_codes**
+| **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
+| --- | --- | --- | --- |
+| rate_code_id | รหัสเรทราคาที่ใช้ในการจอง (Unique Identifier) เชื่อมกับ fact_bookings.csv (rate_code_id) | Nominal | RC_AAA, RC_PROMO |
+| rate_name | ชื่อเรียกของเรทราคา | Nominal | AAA Discount, Seasonal Promo |
+| multiplier | ตัวคูณที่ใช้ปรับราคาจาก Base Rate | Ratio (Continuous) | 1, 0.7 |
+| is_commissionable | ตัวบ่งชี้ว่าราคานี้ต้องจ่ายค่าคอมมิชชันหรือไม่ | Nominal (Binary) | TRUE / FALSE |
+
+### **dim_channels**
+| **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
+| --- | --- | --- | --- |
+| channel_id | รหัสช่องทางที่ใช้จอง (Unique Identifier) เชื่อมกับ fact_bookings.csv (channel_id) | Nominal | CH_DIR, CH_GDS |
+| channel_name | ชื่อเรียกช่องทางการจอง | Nominal | Direct Website, Corporate Agent |
+| channel_type | ประเภทของช่องทางการจอง | Nominal | Direct, OTA |
+| commision_rate | อัตราค่าคอมมิชชันที่ต้องจ่ายให้กับช่องทางนั้นๆ | Ratio (Continuous) | 0, 0.18 |
+
+### **dim_calendar**
+| **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
+| --- | --- | --- | --- |
+| date_key | วันที่ที่เป็นตัวระบุหลักของปฏิทิน (Format: YYYY-MM-DD) เชื่อมกับ fact_bookings.csv (check_in_date) | Interval (Date) | 2025-10-25, 2026-03-31 |
+| day_name | ชื่อวันในสัปดาห์ | Nominal | Monday, Thursday |
+| is_weekend | ตัวบ่งชี้ว่าเป็นวันเสาร์-อาทิตย์หรือไม่ | Nominal (Binary) | TRUE / FALSE |
+| is_holiday | ตัวบ่งชี้ว่าเป็นวันหยุดนักขัตฤกษ์หรือไม่ | Nominal (Binary) | TRUE / FALSE |
+| season | ช่วงฤดูกาลของการท่องเที่ยว | Nominal | Shoulder, Low, High |
+
+## **Measure**
+
+| **Measure** | **Definition** | **Calculation Formula** | **Range of Values** |
+| --- | --- | --- | --- |
+| **RevPAR** (Revenue Per Available Room) | รายได้เฉลี่ยต่อห้องทั้งหมดที่มี | SUM([Total Room Revenue])/SUM([Rooms Available For Sale]) | [0, Infinity] |
+| **ADR** (Average Daily Rate) | ราคาเฉลี่ยต่อห้องที่ถูกขายได้ | SUM([Total Room Revenue]) / COUNT([Booking Id]) | [0, Infinity] |
+| **OCC** (Occupancy) | อัตรการเข้าพัก | COUNT([Booking Id]) / SUM([Rooms Available For Sale]) | [0%, 100%] |
+
+## **Dimension**
+
+| **Measure** | **Definition** | **Calculation Formula** | **Example** |
+| --- | --- | --- | --- |
+| LOS | จำนวนคืนที่เข้าพักในโรงแรม | DATEDIFF('day', [Check In Date], [Check Out Date]) | 1, 3 |
+| Day of Week | วันที่ที่มีผู้เข้าพัก | - | Monday, Thursday |
+| Booking Channel | ช่องทางการจองที่พัก | - | Direct Website, Corporate Agent |
+| Rate Code | ส่วนลดสำหรับการจอง | - | Rack Rate, Non-Refundable |
+| Customer Segment | ประเภทกลุ่มลูกค้าต่าง ๆ | - | Leisure, Business |
+| BLT | จำนวนวันระหว่างวันที่จองกับวันที่พัก | DATEDIFF('day', [Booking Date], [Check In Date]) | 0, 62 |
+
+
+## **EDA & Visualizations**
+
+### **Hypothesis 1:** Dynamic Pricing Inefficiency
+
+การใช้ราคาแบบ Static (ราคาเดียวตลอดสัปดาห์) ในวันศุกร์และเสาร์ ทำให้โรงแรมเสียโอกาสในการทำกำไร (Revenue Opportunity Loss) แม้จะมี Occupancy สูงก็ตาม**
+
+![Dashboard for Hypothesis 1](./blueprints/DB_Hypo1.png)
+
+**Non-Reject Hypothesis**
+
+#### Findings and Insights
+
+- วันหยุด (Weekend) มี Occupancy หรือความต้องการที่จะเข้าพักสูงกว่าวันธรรมดา (Weekday) อย่างมีนัยสำคัญ
+- แต่ ADR ในวันหยุดนั้นกลับไม่ได้สูงตาม ซึ่งเป็นผลมาจากกลยุทธ์การตั้งราคาแบบ Static
+- กลยุทธิ์การตั้งราคาในวันหยุดไม่ได้สอดคล้องกับความต้องการ (Demand) และสามารถเพิ่ม ADR ในวันหยุดได้
+
+---
+
+### **Hypothesis 2:** Leisure Segment Price Elasticity
+
+ลูกค้ากลุ่ม Leisure ที่เข้าพักในวันหยุด มีความอ่อนไหวต่อราคา (Price Sensitivity) ต่ำกว่าลูกค้ากลุ่มอื่น ทำให้โรงแรมสามารถปรับเพิ่มราคาในช่วง Weekend ได้มากกว่าปัจจุบัน
+
+![Dashboard for Hypothesis 2](./blueprints/DB_Hypo2.png)
+
+**Non-Reject Hypothesis**
+
+#### Findings and Insights
+
+1. **Segment Comparison**
+   1. รายได้ส่วนใหญ่ของโรงแรมมาจากกลุ่ม Leisure
+   2.	กลุ่ม Leisure ใน Weekend มี ADR สูงพอ ๆ กับ Weekday
+2. **ความสัมพันธ์ของราคากับยอดจองของ Leisure**
+   1. เส้น Trend Line ของวันหยุด (สีแดง) มีความชันน้อยหรือเกือบขนานกับแกน X แสดงได้ว่าแม้ ADR จะสูงขึ้น ยอดจองก็ยังคงที่ หรือ ความยืดหยุ่นสูง
+3. **ความสัมพันธ์ของราคากับยอดจองของ Leisure**
+   1. กลุ่ม Leisure จะมีการใช้ Rack rate และ Seasonal Promo ที่ค่อนข้างสูง
+   2. กลุ่ม Business จะมีการใช้ Rack rate อยู่พอสมควร และมีการใช้ Corporate Negotiated ในสัดส่วนที่สูง
+4. **วิเคราะห์ผ่าน Rate Code เฉพาะ Leisure**
+   1. กลุ่ม Leisure ใน Weekend ยังคงจอง Rack Rate (เต็มราคา) ในสัดส่วนที่ค่อนข้างสูง หรือไม่ได้รรอใช้ Seasonal Promo ทั้งหมด แสดงได้ว่ากลุ่ม Leisure มีกำลังซื้อและยอมรับราคาได้
+
+---
+   
+### **Hypothesis 3:** Stay Pattern Optimization (MLOS)
+
+การไม่มีข้อกำหนดระยะเวลาเข้าพักขั้นต่ำ (Minimum Length of Stay - MLOS) ในวันเสาร์ ทำให้เกิดการเสียโอกาสในการขายห้องพักแบบต่อเนื่อง (Friday-Sunday) ส่งผลให้ RevPAR เฉลี่ยของทั้งช่วงสุดสัปดาห์ต่ำกว่าที่ควรจะเป็น
+
+![Dashboard for Hypothesis 3](./blueprints/DB_Hypo3.png)
+
+**Non-Reject Hypothesis**
+
+#### Findings and Insights
+
+1. **Stay Pattern**
+   1. สัดส่วนการจองในวันเสาร์กระจุกตัวอยู่ที่ระยะเวลา 1-2 คืนรวมกันเกือบ 45% ของการจองทั้งหมด การจำกัดหรือคัดกรองเฉพาะผู้ที่จอง 2 คืนขึ้นไป (MLOS 2) จะช่วยดันให้ Occupancy ของวันศุกร์หรืออาทิตย์สูงขึ้นตามไปด้วยโดยอัตโนมัติจากการพักต่อเนื่อง
+2. **Revenue Impact**
+   1. จากการวิเคราะห์เปรียบเทียบค่ารายได้เฉลี่ย (Average Revenue) ลูกค้าที่จองเข้าพักในวันเสาร์เพียง 1 คืน สร้างรายได้เฉลี่ยประมาณ 193 บาท ในขณะที่ลูกค้าที่พัก 2 คืนสร้างรายได้สูงถึง 384 บาท การปล่อยให้มีการจอง 1 คืนในวันเสาร์เป็นจำนวนมาก (ซึ่งมีสัดส่วนถึง 21.6%) จึงเป็นการเสียโอกาสในการรับรายได้ที่สูงกว่าจากการพักต่อเนื่อง
+3. **Displacement Analysis**
+   1. แม้ Occupancy ในวันเสาร์จะสูง แต่ในวันข้างเคียง (ศุกร์ และ อาทิตย์) ยังมีช่องว่างของห้องพักที่เหลืออยู่ (Occupancy อยู่ที่ประมาณ 41% และ 50%) สิ่งนี้ชี้ให้เห็นว่าการจอง 1 คืนในวันเสาร์กำลัง "แย่งพื้นที่" ลูกค้ากลุ่มที่ต้องการพักยาวแบบ Weekend Getaway (ศุกร์-เสาร์ หรือ เสาร์-อาทิตย์) ซึ่งเป็นกลุ่มที่สร้างมูลค่าสูงกว่า
+
+---
+
+### **Hypothesis 4:** Rate Code Dilution (การใช้โปรโมชั่นพร่ำเพรื่อในฤดูกาลท่องเที่ยว)
+
+การใช้ Rate Code ประเภท 'Seasonal Promo' หรือ 'AAA Discount' ในช่วง High Season มีสัดส่วนที่สูงเกินความจำเป็น ส่งผลให้ ADR เฉลี่ยลดลง (Dilution) ทั้งที่ความต้องการห้องพักสูงอยู่แล้ว
+
+![Dashboard for Hypothesis 4](./blueprints/DB_Hypo4.png)
+
+**Non-Reject Hypothesis**
+
+#### Findings and Insights
+
+- จากกราฟแสดงให้เห็นว่าในช่วง High Season มีสัดส่วนของ Seasonal Promo (ลด 30%) และ Corporate Negotiated (ลด 20%) รวมกันถึง 57.36% (30.43% + 26.93%)
+- แสดงว่าเกิด Dilution (การเจือจองของราคา) เพราะความจริงแล้วช่วงนี้ควรเป็นช่วงที่ขาย Rack Rate ได้มากที่สุด
+
+---
+
+### **Hypothesis 5:** Low Season Segment Pivot (การปรับกลุ่มเป้าหมายในฤดูกาลท่องเที่ยวต่ำ)
+
+ในช่วง Low Season (May-June, Oct-Nov) รายได้หลักถูกขับเคลื่อนโดยกลุ่ม 'Business' มากกว่า 'Leisure' การทำโปรโมชั่นที่เน้นนักท่องเที่ยวในช่วงนี้จึงไม่ได้ประสิทธิภาพเท่ากับการทำโปรโมชั่นกับบริษัท (Corporate)
+
+![Dashboard for Hypothesis 5](./blueprints/DB_Hypo5.png)
+
+**Reject Hypothesis**
+
+#### Findings and Insights
+
+- ในช่วง Low Season แม้จะมีการยอดการเข้าพักที่น้อย กลุ่มลูกค้าที่เข้าพักในสัดส่วนที่มากที่สุดไม่ใช่กลุ่ม Business (2.63%) แต่เป็นกลุ่ม Leisure (3.81%)
+- กลุ่มที่สร้างรายได้ให้กับโรงแรมมากที่สุดก็ยังคงเป็นกลุ่ม Leisure (62.35%) ไม่ใช่กลุ่ม Business (13.58%)
+
+---
+
+### **Hypothesis 6:** Channel revenue Analysis
+
+รายได้จากการจองผ่านช่องทางต่าง ๆ ของโรงแรมส่วนใหญ่เป็นช่องทางอื่น ๆ มากกว่าตรง (Direct) แต่เมื่อพิจารณาแล้วจะพบว่าช่องทางอื่น ๆ มีการเสียค่า Commission ที่เยอะมาก ซึ่งส่งผลให้โรงแรมเสียรายได้ที่ควรจะเป็นของโรมแรม ถ้าสามารถผลักดันให้ลูกค้าจองผ่านช่องทางตรงได้เพิ่มขึ้นจะสามารถทำให้โรงแรมกลับมาสร้างรายได้อย่างมีประสิทธิภาพมากขึ้น
+
+![Dashboard for Hypothesis 6](./blueprints/DB_Hypo6.png)
+
+**Non-Reject Hypothesis**
+
+#### Findings and Insights
+
+1. **Without compute commission**
+   1. รายได้จากช่องทางตรง (Direct Website, Walk-in) สามารถสร้างรายได้ให้แก่โรมแรมทั้งสิ้น **2,623,735 บาท** (42.136%)
+   2. รายได้จากช่องทางอื่น (Corporate Agent, GDS, OTA) สามารถสร้างรายได้ให้แก่โรมแรมทั้งสิ้น **3,603,086 บาท** (57.864%)
+   3. สัดส่วนของรายได้ผ่านช่องทางตรงและช่องทางอื่นทำให้ทราบว่ารายได้จากช่องทางอื่น ๆ มีสัดส่วนมากกว่าช่องทางตรงเล็กน้อย
+2. **With compute commission**
+   1. รายได้สุทธิจากช่องทางตรง (Direct Website, Walk-in) สามารถสร้างรายได้ให้แก่โรมแรมทั้งสิ้น **2,623,735 บาท** (45.555%)
+   2. รายได้จากช่องทางอื่น (Corporate Agent, GDS, OTA) สามารถสร้างรายได้ให้แก่โรมแรมทั้งสิ้น **3,135,811 บาท** (54.445%)
+   3. สังเกตได้ว่าสัดส่วนรายได้สุทธิของช่องทางตรงเพิ่มขึ้นเป็น 45.555% และสัดส่วนรายได้สุทธิของช่องทางอื่นลดลงเป็น 54.445% จากคำนวณค่า Commission ที่ต้องเสียไป ซึ่งคิดเป็นเงินทั้งสิ้น **467,275 บาท** (7.504%)
+
+---
+
+### **Hypothesis 7:** The "Sweet Spot" Lead Time (ช่วงเวลาทองของการจองที่ทำกำไรสูงสุด)
+
+การจองที่มี BLT อยู่ในช่วง 7-14 วัน ให้ค่า RevPAR สูงที่สุดเมื่อเทียบกับช่วงเวลาอื่น เนื่องจากเป็นช่วงที่ความต้องการ (Demand) เริ่มคงที่และโรงแรมไม่ต้องใช้โปรโมชั่นลดราคาหนักเท่ากลุ่ม Early BLT
+
+![Dashboard for Hypothesis 7](./blueprints/DB_Hypo7.png)
+
+**Reject Hypothesis**
+
+#### Findings and Insights
+
+1. **The "Sweet Spot" Lead Time**
+   1. การจองแบบ 31+ Days ให้ ADR (1,255.37) และ RevPAR (53.13) สูงสุดและคือ **Sweet Spot** หรือก็คือยิ่งจองล่วงหน้านาน ยิ่งดีทั้งราคาห้องและรายได้รวมต่อห้องทั้งหมด
+2. **วิเคราะห์ความสัมพันธ์ระหว่าง LOS กับจำนวน Booking ของกลุ่ม Early BLT**
+   1. ลูกค้ากลุ่ม Early BLT (31+ Days) มีพฤติกรรมที่จะจองพักหลายคืน (LOS อย่างน้อย 3 วัน) และนิยมที่จะจองพัก 5 คืนและ 7 คืนมากที่สุด
+3. **วิเคราะห์ความสัมพันธ์ระหว่าง LOS กับ Net ADR ของกลุ่ม Early BLT**
+   1. จาก 2. ทำให้ ลูกค้ากลุ่ม Early BLT (31+ Days) ยิ่งพักหลายคืน ยิ่งสร้าง Net ADR สูง
+4. **วิเคราะห์ความสัมพันธ์ระหว่าง LOS กับ RevPAR ของกลุ่ม Early BLT**
+   1. จาก 2. ทำให้ ลูกค้ากลุ่ม Early BLT (31+ Days) ยิ่งพักหลายคืน ยิ่งสร้าง RevPAR สูง
+
+---
+
+## **Findings (Insights)**
+
+- วันหยุด (Weekend) มี Occupancy หรือความต้องการที่จะเข้าพักสูงกว่าวันธรรมดา (Weekday) อย่างมีนัยสำคัญ
+- กลยุทธิ์การตั้งราคาในวันหยุดไม่ได้สอดคล้องกับความต้องการ (Demand) และสามารถเพิ่ม ADR ในวันหยุดได้
+- รายได้ส่วนใหญ่ของโรงแรมมาจากกลุ่ม Leisure
+- ลูกค้ากลุ่ม Leisure มีความยืดหยุ่นทางราคาสูงหรือมีความอ่อนไหวต่อราคาต่ำ (ADR)
+- สัดส่วนการจองในวันเสาร์กระจุกตัวอยู่ที่ระยะเวลา 1-2 คืนรวมกันเกือบ 45% ของการจองทั้งหมด การจำกัดหรือคัดกรองเฉพาะผู้ที่จอง 2 คืนขึ้นไป (MLOS 2) จะช่วยดันให้ Occupancy ของวันศุกร์หรืออาทิตย์สูงขึ้นตามไปด้วยโดยอัตโนมัติจากการพักต่อเนื่อง
+- ช่วง High Season มีสัดส่วนของ Seasonal Promo (ลด 30%) และ Corporate Negotiated (ลด 20%) รวมกันถึง 57.36% (30.43% + 26.93%)
+- เกิด Dilution (การเจือจองของราคา) ในช่วง High Season เพราะความจริงแล้วช่วงนี้ควรเป็นช่วงที่ขาย Rack Rate ได้มากที่สุด
+- ช่วง Low Season แม้จะมีการยอดการเข้าพักที่น้อย กลุ่มลูกค้าที่เข้าพักในสัดส่วนที่มากที่สุดยังคงเป็นกลุ่ม Leisure (3.81%)
+- ช่วง Low Season กลุ่มที่สร้างรายได้ให้กับโรงแรมมากที่สุดคือกลุ่ม Leisure (62.35%)
+- โรงแรมเสียค่า Commission ไปเป็นเงินทั้งสิ้น **467,275 บาท** (7.504%)
+- การจองแบบ 31+ Days ให้ ADR (1,255.37) และ RevPAR (53.13) สูงสุดและคือ **Sweet Spot**
+- กลุ่มลูกค้าที่มีพฤติกรรมการจองล่วงหน้าแบบ 31+ Days มักจะมีพฤติกรรมการเข้าพักอย่างน้อย 3 คืนเป็นต้นไป
+
+## **Recommendations**
+
+### **Hypothesis 1:** Dynamic Pricing Inefficiency
+- ปรับเพิ่มราคาห้องพัก (Weekend Surcharge) ปรับเพิ่มราคาขายต่อห้องทุกประเภทขึ้น 25% ในวันศุกร์และเสาร์ เนื่องจากข้อมูลพบว่ามี Demand สูงแต่ราคาเดิมยังไม่สอดคล้องกับโอกาสในการทำกำไร
+
+### **Hypothesis 2:** Leisure Segment Price Elasticity
+
+จำกัดสิทธิ์ Seasonal Promo ปรับลดโควตาผู้ใช้สิทธิ์โปรโมชั่นรายฤดูกาลลง 40% (จาก 2,391 เหลือ 1,435 สิทธิ์) เพื่อผลักดันให้ลูกค้ากลุ่ม Leisure ที่มีความอ่อนไหวต่อราคาต่ำเปลี่ยนไปจองในราคาเต็ม (Rack Rate) แทน
+
+### **Hypothesis 3:** Stay Pattern Optimization (MLOS)
+
+ใช้มาตรการ MLOS 2 กำหนดระยะเวลาเข้าพักขั้นต่ำอย่างน้อย 2 คืน สำหรับการจองที่คาบเกี่ยววันเสาร์ เพื่อปิดช่องว่างการเสียโอกาสในวันศุกร์และอาทิตย์ (คืนฟันหลอ) และเพิ่มรายได้เฉลี่ยต่อการจอง (Average Daily Revenue)
+
+### **Hypothesis 4:** Rate Code Dilution
+
+ปรับปรุงเงื่อนไข Corporate ลดส่วนลดกลุ่ม Corporate Negotiated จาก 20% เหลือ 15% โดยเปลี่ยนไปมอบสิทธิพิเศษที่ไม่ใช่ตัวเงินแทน เช่น การขยายเวลา Late Check-out ถึง 13:30 น. หรือการให้ Hotel Credit 300 บาท สำหรับใช้ในการสั่งอาหารในโรงแรม หรือ อาจจะใช้เป็นส่วนลดราคาห้องพักในอนาคต เพื่อกระตุ้นการใช้จ่ายภายในโรงแรม
+
+### **Hypothesis 5:** Low Season Segment Pivot 
+
+เน้นกลุ่ม Leisure เป็นหลัก มุ่งเน้นการทำตลาดไปที่กลุ่ม Leisure ต่อเนื่องแม้ในช่วง Low Season เนื่องจากเป็นกลุ่มที่ยังคงสร้างรายได้หลัก (62.35%) และมีสัดส่วนการเข้าพักสูงสุดเมื่อเทียบกับกลุ่มอื่น
+
+### **Hypothesis 6:** Channel revenue Analysis
+
+ผลักดันการจองตรง (Direct Booking): เร่งทำ SEO ให้เว็บไซต์โรงแรมติดอันดับ 1-3 เพื่อลดภาระค่า Commission และดำเนินการ เจรจาขอลดค่า Commission กับตัวแทนขาย (OTA/GDS) เพื่อเพิ่มรายได้สุทธิ (Net Revenue)
+
+### **Hypothesis 7:** The Sweet Spot Lead Time 
+
+กระตุ้นกลุ่ม Early BLT เพิ่มงบการตลาดเจาะกลุ่มที่จองล่วงหน้า 31 วันขึ้นไป และออกแบบแพ็กเกจพักยาว (Stay Longer) เช่น พัก 3-5 คืนรับฟรีอาหารเช้าหรือบริการสปา พร้อมใช้ Flash Deals เฉพาะในช่วงที่ Occupancy ต่ำเพื่อกระตุ้นการจองระยะสั้น
+
+**หมายเหตุ:** ทุกมาตรการควรกำหนดระยะเวลาเก็บข้อมูลและติดตามผลเป็นเวลา 1 ไตรมาส เพื่อนำผลลัพธ์มาวิเคราะห์พฤติกรรมลูกค้าและปรับปรุงกลยุทธ์ในอนาคต
+
+
