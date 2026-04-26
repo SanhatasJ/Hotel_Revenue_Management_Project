@@ -1,4 +1,4 @@
-<img width="105" height="20" alt="image" src="https://github.com/user-attachments/assets/408c9a1e-677b-4de0-9e4e-7fb55481e835" /># **Hotel_Revenue_Management_Project**
+# **Hotel_Revenue_Management_Project**
 Repository นี้ใช้เพื่อทำ Project วิชา CP372 Data Analytics and Business Intelligence
 
 ## **Member:**
@@ -404,62 +404,62 @@ Please write and execute a Python script using pandas and numpy to generate this
 ### **fact_bookings**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| booking_id |  |  |  |
-| guest_id |  |  |  |
-| booking_date |  |  |  |
-| check_in_date |  |  |  |
-| check_out_date |  |  |  |
-| room_type_id |  |  |  |
-| rate_code_id |  |  |  |
-| channel_id |  |  |  |
-| segment_id |  |  |  |
-| status |  |  |  |
-| total_room_revenue |  |  |  |
-| number_of_room |  |  |  |
-| adults_count |  |  |  |
-| children_count |  |  |  |
+| booking_id |  | Ordinal |  |
+| guest_id |  | Ordinal |  |
+| booking_date |  | Interval (Date) |  |
+| check_in_date |  | Interval (Date) |  |
+| check_out_date |  | Interval (Date) |  |
+| room_type_id |  | Nominal |  |
+| rate_code_id |  | Nominal |  |
+| channel_id |  | Nominal |  |
+| segment_id |  | Nominal |  |
+| status |  | Nominal |  |
+| total_room_revenue |  | Ratio (Continuous) |  |
+| number_of_room |  | Ratio (Discrete) |  |
+| adults_count |  | Ratio (Discrete) |  |
+| children_count |  | Ratio (Discrete) |  |
 
 ### **dim_room_type**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| room_type_id |  |  |  |
-| room_type_name |  |  |  |
-| base_rate |  |  |  |
-| capacity_count |  |  |  |
-| max_occupancy |  |  |  |
+| room_type_id |  | Nominal |  |
+| room_type_name |  | Nominal |  |
+| base_rate |  | Ratio (Continuous) |  |
+| capacity_count |  | Ratio (Discrete) |  |
+| max_occupancy |  | Ratio (Discrete) |  |
 
 ### **dim_room_inventory**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| date |  |  |  |
-| total_capacity |  |  |  |
-| rooms_out_of_order |  |  |  |
-| rooms_available_for_sale |  |  |  |
+| date |  | Interval (Date) |  |
+| total_capacity |  | Ratio (Discrete) |  |
+| rooms_out_of_order |  | Ratio (Discrete) |  |
+| rooms_available_for_sale |  | Ratio (Discrete) |  |
 
 ### **dim_rate_codes**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| rate_code_id |  |  |  |
-| rate_name |  |  |  |
-| multiplier |  |  |  |
-| is_commissionable |  |  |  |
+| rate_code_id |  | Nominal |  |
+| rate_name |  | Nominal |  |
+| multiplier |  | Ratio (Continuous) |  |
+| is_commissionable |  | Nominal (Binary) |  |
 
 ### **dim_channels**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| channel_id |  |  |  |
-| channel_name |  |  |  |
-| channel_type |  |  |  |
-| commision_rate |  |  |  |
+| channel_id |  | Nominal |  |
+| channel_name |  | Nominal |  |
+| channel_type |  | Nominal |  |
+| commision_rate |  | Ratio (Continuous) |  |
 
 ### **dim_calendar**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| date_key |  |  |  |
-| day_name |  |  |  |
-| is_weekend |  |  |  |
-| is_holiday |  |  |  |
-| season |  |  |  |
+| date_key |  | Interval (Date) |  |
+| day_name |  | Nominal |  |
+| is_weekend |  | Nominal (Binary) |  |
+| is_holiday |  | Nominal (Binary) |  |
+| season |  | Nominal |  |
 
 ## **Measure**
 
