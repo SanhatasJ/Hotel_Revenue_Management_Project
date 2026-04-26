@@ -404,62 +404,62 @@ Please write and execute a Python script using pandas and numpy to generate this
 ### **fact_bookings**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| booking_id |  | Ordinal |  |
-| guest_id |  | Ordinal |  |
-| booking_date |  | Interval (Date) |  |
-| check_in_date |  | Interval (Date) |  |
-| check_out_date |  | Interval (Date) |  |
-| room_type_id |  | Nominal |  |
-| rate_code_id |  | Nominal |  |
-| channel_id |  | Nominal |  |
-| segment_id |  | Nominal |  |
-| status |  | Nominal |  |
-| total_room_revenue |  | Ratio (Continuous) |  |
-| number_of_room |  | Ratio (Discrete) |  |
-| adults_count |  | Ratio (Discrete) |  |
-| children_count |  | Ratio (Discrete) |  |
+| booking_id | รหัสหมายเลขการจอง (Unique Identifier) | Ordinal |  |
+| guest_id | รหัสอ้างอิงข้อมูลผู้เข้าพัก (Unique Identifier) | Ordinal |  |
+| booking_date | วันที่ทำการจองห้องพัก | Interval (Date) |  |
+| check_in_date | วันที่ผู้เข้าพักเช็คอิน | Interval (Date) |  |
+| check_out_date | วันที่ผู้เข้าพักเช็คเอาท์ | Interval (Date) |  |
+| room_type_id | รหัสประเภทห้องพักที่จอง (Unique Identifier) | Nominal |  |
+| rate_code_id | รหัสเรทราคาที่ใช้ในการจอง (Unique Identifier) | Nominal |  |
+| channel_id | รหัสช่องทางที่ใช้จอง (Unique Identifier) | Nominal |  |
+| segment_id | รหัสกลุ่มตลาดของลูกค้า (Unique Identifier) | Nominal |  |
+| status | สถานะการจอง | Nominal |  |
+| total_room_revenue | รายได้รวมจากค่าห้องพักของการจองครั้งนี้ | Ratio (Continuous) |  |
+| number_of_room | จำนวนห้องที่จองภายใต้เลขการจองนี้ | Ratio (Discrete) |  |
+| adults_count | จำนวนผู้ใหญ่ | Ratio (Discrete) |  |
+| children_count | จำนวนเด็ก | Ratio (Discrete) |  |
 
 ### **dim_room_type**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| room_type_id |  | Nominal |  |
-| room_type_name |  | Nominal |  |
-| base_rate |  | Ratio (Continuous) |  |
-| capacity_count |  | Ratio (Discrete) |  |
-| max_occupancy |  | Ratio (Discrete) |  |
+| room_type_id | รหัสประเภทห้องพักที่จอง (Unique Identifier) เชื่อมกับ fact_bookings.csv (room_type_id) | Nominal |  |
+| room_type_name | ชื่อประเภทห้องพัก | Nominal |  |
+| base_rate | ราคามาตรฐานของห้องประเภทนั้น ๆ ต่อคืนก่อนใช้ rate code | Ratio (Continuous) |  |
+| capacity_count | จำนวนห้องพักทั้งหมดที่มีในโรงแรมสำหรับห้องประเภทนั้น ๆ | Ratio (Discrete) |  |
+| max_occupancy | จำนวนผู้เข้าพักสูงสุดที่อนุญาต | Ratio (Discrete) |  |
 
 ### **dim_room_inventory**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| date |  | Interval (Date) |  |
-| total_capacity |  | Ratio (Discrete) |  |
-| rooms_out_of_order |  | Ratio (Discrete) |  |
-| rooms_available_for_sale |  | Ratio (Discrete) |  |
+| date | วันที่ที่มีการจัดเก็บข้อมูลสินค้าคงคลัง เชื่อมกับ dim_calendar.csv (date_key) | Interval (Date) |  |
+| total_capacity | จำนวนห้องพักทั้งหมดที่มีในโรงแรม | Ratio (Discrete) |  |
+| rooms_out_of_order | จำนวนห้องที่ปิดปรับปรุงหรือไม่พร้อมขายในวันนั้น | Ratio (Discrete) |  |
+| rooms_available_for_sale | จำนวนห้องสุทธิที่เปิดขายจริงในวันนั้น | Ratio (Discrete) |  |
 
 ### **dim_rate_codes**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| rate_code_id |  | Nominal |  |
-| rate_name |  | Nominal |  |
-| multiplier |  | Ratio (Continuous) |  |
-| is_commissionable |  | Nominal (Binary) |  |
+| rate_code_id | รหัสเรทราคาที่ใช้ในการจอง (Unique Identifier) เชื่อมกับ fact_bookings.csv (rate_code_id) | Nominal |  |
+| rate_name | ชื่อเรียกของเรทราคา | Nominal |  |
+| multiplier | ตัวคูณที่ใช้ปรับราคาจาก Base Rate | Ratio (Continuous) |  |
+| is_commissionable | ตัวบ่งชี้ว่าราคานี้ต้องจ่ายค่าคอมมิชชันหรือไม่ | Nominal (Binary) |  |
 
 ### **dim_channels**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| channel_id |  | Nominal |  |
-| channel_name |  | Nominal |  |
-| channel_type |  | Nominal |  |
-| commision_rate |  | Ratio (Continuous) |  |
+| channel_id | รหัสช่องทางที่ใช้จอง (Unique Identifier) เชื่อมกับ fact_bookings.csv (channel_id) | Nominal |  |
+| channel_name | ชื่อเรียกช่องทางการจอง | Nominal |  |
+| channel_type | ประเภทของช่องทางการจอง | Nominal |  |
+| commision_rate | อัตราค่าคอมมิชชันที่ต้องจ่ายให้กับช่องทางนั้นๆ | Ratio (Continuous) |  |
 
 ### **dim_calendar**
 | **Attribute** | **Description** | **Data Type** | **Valid Range/Example** |
 | --- | --- | --- | --- |
-| date_key |  | Interval (Date) |  |
-| day_name |  | Nominal |  |
-| is_weekend |  | Nominal (Binary) |  |
-| is_holiday |  | Nominal (Binary) |  |
-| season |  | Nominal |  |
+| date_key | วันที่ที่เป็นตัวระบุหลักของปฏิทิน (Format: YYYY-MM-DD) เชื่อมกับ fact_bookings.csv (check_in_date) | Interval (Date) |  |
+| day_name | ชื่อวันในสัปดาห์ | Nominal |  |
+| is_weekend | ตัวบ่งชี้ว่าเป็นวันเสาร์-อาทิตย์หรือไม่ | Nominal (Binary) |  |
+| is_holiday | ตัวบ่งชี้ว่าเป็นวันหยุดนักขัตฤกษ์หรือไม่ | Nominal (Binary) |  |
+| season | ช่วงฤดูกาลของการท่องเที่ยว | Nominal |  |
 
 ## **Measure**
 
