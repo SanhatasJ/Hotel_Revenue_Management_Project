@@ -465,9 +465,9 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 | **Measure** | **Definition** | **Calculation Formula** | **Range of Values** |
 | --- | --- | --- | --- |
-| **RevPAR** (Revenue Per Available Room) | รายได้เฉลี่ยต่อห้องทั้งหมดที่มี |  | [0, Infinity] |
-| **ADR** (Average Daily Rate) | ราคาเฉลี่ยต่อห้องที่ถูกขายได้ |  | [0, Infinity] |
-| **OCC** (Occupancy) | อัตรการเข้าพัก |  | [0%, 100%] |
+| **RevPAR** (Revenue Per Available Room) | รายได้เฉลี่ยต่อห้องทั้งหมดที่มี | SUM([Total Room Revenue])/SUM([Rooms Available For Sale]) | [0, Infinity] |
+| **ADR** (Average Daily Rate) | ราคาเฉลี่ยต่อห้องที่ถูกขายได้ | SUM([Total Room Revenue]) / COUNT([Booking Id]) | [0, Infinity] |
+| **OCC** (Occupancy) | อัตรการเข้าพัก | COUNT([Booking Id]) / SUM([Rooms Available For Sale]) | [0%, 100%] |
 
 ## **Dimension**
 
