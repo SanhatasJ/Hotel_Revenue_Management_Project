@@ -7,7 +7,7 @@ Repository นี้ใช้เพื่อทำ Project วิชา CP372 Da
 - นายสัณหธรรศน์ จึงธีรพานิช 66102010154
 
 ## **Project Canvas**
-![Project Canvas](./Project_canvas.png)
+![Project Canvas](./blueprints/Project_canvas.png)
 
 ## **Background & Pain Points**
 
@@ -487,7 +487,7 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 การใช้ราคาแบบ Static (ราคาเดียวตลอดสัปดาห์) ในวันศุกร์และเสาร์ ทำให้โรงแรมเสียโอกาสในการทำกำไร (Revenue Opportunity Loss) แม้จะมี Occupancy สูงก็ตาม**
 
-![Dashboard for Hypothesis 1](./dashboards/DB_Hypo1.png)
+![Dashboard for Hypothesis 1](./blueprints/DB_Hypo1.png)
 
 **Non-Reject Hypothesis**
 
@@ -503,7 +503,7 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 ลูกค้ากลุ่ม Leisure ที่เข้าพักในวันหยุด มีความอ่อนไหวต่อราคา (Price Sensitivity) ต่ำกว่าลูกค้ากลุ่มอื่น ทำให้โรงแรมสามารถปรับเพิ่มราคาในช่วง Weekend ได้มากกว่าปัจจุบัน
 
-![Dashboard for Hypothesis 2](./dashboards/DB_Hypo2.png)
+![Dashboard for Hypothesis 2](./blueprints/DB_Hypo2.png)
 
 **Non-Reject Hypothesis**
 
@@ -526,7 +526,7 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 การไม่มีข้อกำหนดระยะเวลาเข้าพักขั้นต่ำ (Minimum Length of Stay - MLOS) ในวันเสาร์ ทำให้เกิดการเสียโอกาสในการขายห้องพักแบบต่อเนื่อง (Friday-Sunday) ส่งผลให้ RevPAR เฉลี่ยของทั้งช่วงสุดสัปดาห์ต่ำกว่าที่ควรจะเป็น
 
-![Dashboard for Hypothesis 3](./dashboards/DB_Hypo3.png)
+![Dashboard for Hypothesis 3](./blueprints/DB_Hypo3.png)
 
 **Non-Reject Hypothesis**
 
@@ -545,7 +545,7 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 การใช้ Rate Code ประเภท 'Seasonal Promo' หรือ 'AAA Discount' ในช่วง High Season มีสัดส่วนที่สูงเกินความจำเป็น ส่งผลให้ ADR เฉลี่ยลดลง (Dilution) ทั้งที่ความต้องการห้องพักสูงอยู่แล้ว
 
-![Dashboard for Hypothesis 4](./dashboards/DB_Hypo4.png)
+![Dashboard for Hypothesis 4](./blueprints/DB_Hypo4.png)
 
 **Non-Reject Hypothesis**
 
@@ -560,7 +560,7 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 ในช่วง Low Season (May-June, Oct-Nov) รายได้หลักถูกขับเคลื่อนโดยกลุ่ม 'Business' มากกว่า 'Leisure' การทำโปรโมชั่นที่เน้นนักท่องเที่ยวในช่วงนี้จึงไม่ได้ประสิทธิภาพเท่ากับการทำโปรโมชั่นกับบริษัท (Corporate)
 
-![Dashboard for Hypothesis 5](./dashboards/DB_Hypo5.png)
+![Dashboard for Hypothesis 5](./blueprints/DB_Hypo5.png)
 
 **Reject Hypothesis**
 
@@ -575,7 +575,7 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 รายได้จากการจองผ่านช่องทางต่าง ๆ ของโรงแรมส่วนใหญ่เป็นช่องทางอื่น ๆ มากกว่าตรง (Direct) แต่เมื่อพิจารณาแล้วจะพบว่าช่องทางอื่น ๆ มีการเสียค่า Commission ที่เยอะมาก ซึ่งส่งผลให้โรงแรมเสียรายได้ที่ควรจะเป็นของโรมแรม ถ้าสามารถผลักดันให้ลูกค้าจองผ่านช่องทางตรงได้เพิ่มขึ้นจะสามารถทำให้โรงแรมกลับมาสร้างรายได้อย่างมีประสิทธิภาพมากขึ้น
 
-![Dashboard for Hypothesis 6](./dashboards/DB_Hypo6.png)
+![Dashboard for Hypothesis 6](./blueprints/DB_Hypo6.png)
 
 **Non-Reject Hypothesis**
 
@@ -596,7 +596,7 @@ Please write and execute a Python script using pandas and numpy to generate this
 
 การจองที่มี BLT อยู่ในช่วง 7-14 วัน ให้ค่า RevPAR สูงที่สุดเมื่อเทียบกับช่วงเวลาอื่น เนื่องจากเป็นช่วงที่ความต้องการ (Demand) เริ่มคงที่และโรงแรมไม่ต้องใช้โปรโมชั่นลดราคาหนักเท่ากลุ่ม Early-bird
 
-![Dashboard for Hypothesis 7](./dashboards/DB_Hypo7.png)
+![Dashboard for Hypothesis 7](./blueprints/DB_Hypo7.png)
 
 **Reject Hypothesis**
 
